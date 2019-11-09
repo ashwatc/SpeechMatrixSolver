@@ -216,17 +216,26 @@ function stringToMatrices(inpStr){
     if (splitStr[i] == "by"){
       bounds[0] = parseInt(splitStr[i - 1])
       bounds[1] = parseInt(splitStr[i + 1])
+      splitStr = splitStr.slice(i + 2, splitStr.length)
+      // console.log(splitStr)
     }
 
-    if (splitStr[i] == "values"){
-      for (j = i; j < splitStr.length; j++){
-
+    for (i = 0; i < splitStr.length; i++){
+      if (splitStr[i] == "values"){
+        for (j = i; j < splitStr.length; j++){
+          if (splitStr[i] == "by"){
+            continue;
+          }
+          
+        }
       }
     }
   }
 
   console.log("sup bitch")
-  A = [[1, 2, 3], [2, 1, 3]]
+  // A = [[1, 2, 3], [2, 1, 3]]
+  // A = [[1, 0, 7], [0, 1, 4]]
+  A = [[1, 1, 0, 1, 21], [1, 1, 1, 0, 21], [0, 2, 3, 0, 37], [2, 1, 0, 0, 19]]
 
   console.log(splitStr)
   console.log(bounds)
@@ -275,7 +284,7 @@ function gauss(rows, columns, A){
           A[k][n] -= A[k][i] * x[i];
       }
   }
-  // console.log(x)
+  console.log(x)
 
   for (var i = 0; i < x.length; i++){
     if (Number.isNaN(x[i])){
