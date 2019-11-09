@@ -220,19 +220,21 @@ function stringToMatrices(inpStr){
       // console.log(splitStr)
     }
 
+    matrixRows = []
+    inputMatrix = []
+
     for (i = 0; i < splitStr.length; i++){
       if (splitStr[i] == "values"){
         for (j = i; j < splitStr.length; j++){
-          if (splitStr[i] == "by"){
-            continue;
+          val = splitStr[j].split(',')[0]
+          if (Number.isSafeInteger(parseInt(val))){
+            console.log(val)
           }
-          
         }
       }
     }
   }
 
-  console.log("sup bitch")
   // A = [[1, 2, 3], [2, 1, 3]]
   // A = [[1, 0, 7], [0, 1, 4]]
   A = [[1, 1, 0, 1, 21], [1, 1, 1, 0, 21], [0, 2, 3, 0, 37], [2, 1, 0, 0, 19]]
