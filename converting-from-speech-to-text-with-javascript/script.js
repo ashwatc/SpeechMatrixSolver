@@ -261,6 +261,12 @@ function gauss(rows, columns, A){
           A[k][n] -= A[k][i] * x[i];
       }
   }
-  console.log(x)
+  // console.log(x)
+
+  for (var i = 0; i < x.length; i++){
+    if (Number.isNaN(x[i])){
+      x[i] = "No solution"
+    }
+  }
   return x;
 }
