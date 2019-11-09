@@ -1,6 +1,22 @@
+A = [[2, 1, 6], [3, -2, 2]]
+console.log(gauss(3, 4, A))
+
 function gauss(rows, columns, A){
     var n = A.length;
-  
+    
+    if (n !== rows) {  // Number of expected rows != number of rows
+        var x = "The dimensions of the expected matrix are different from the dimensions of the given matrix!"
+        return x
+    }
+
+    for (var i = 0; i < n - 1; i ++) {
+        if (A[i].length !== A[i + 1].length) {
+            var x = "The dimensions of the expected matrix are different from the dimensions of the given matrix!"
+            return x
+        }
+
+    }
+
     for (var i=0; i<n; i++) {
         // Search for maximum in this column
         var maxEl = Math.abs(A[i][i]);
@@ -40,11 +56,11 @@ function gauss(rows, columns, A){
             A[k][n] -= A[k][i] * x[i];
         }
     }
-    console.log(x)
+    console.log(A)
   
     for (var i = 0; i < x.length; i++){
       if (Number.isNaN(x[i])){
-        x[i] = "No solution"
+        x = "No unique solution!"
       }
     }
     return x;
