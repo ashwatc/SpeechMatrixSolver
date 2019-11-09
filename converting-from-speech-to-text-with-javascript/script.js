@@ -90,7 +90,7 @@ noteTextarea.on('input', function() {
   noteContent = $(this).val();
 })
 
-$('#save-note-btn').on('click', function(e) {
+$('#solve-matrix-btn').on('click', function(e) {
   recognition.stop();
 
   if(!noteContent.length) {
@@ -111,6 +111,13 @@ $('#save-note-btn').on('click', function(e) {
   }
       
 })
+
+$('#clear-input-btn').on('click', function(e) {
+  // Delete all input text, start over
+  noteContent = '';
+  noteTextarea.val('');
+  instructions.text('Input Cleared.');
+});
 
 
 notesList.on('click', function(e) {
@@ -210,8 +217,15 @@ function stringToMatrices(inpStr){
       bounds[0] = parseInt(splitStr[i - 1])
       bounds[1] = parseInt(splitStr[i + 1])
     }
+
+    if (splitStr[i] == "values"){
+      for (j = i; j < splitStr.length; j++){
+
+      }
+    }
   }
 
+  console.log("sup bitch")
   A = [[1, 2, 3], [2, 1, 3]]
 
   console.log(splitStr)
