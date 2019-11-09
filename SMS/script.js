@@ -219,28 +219,43 @@ function stringToMatrices(inpStr){
       splitStr = splitStr.slice(i + 2, splitStr.length)
       // console.log(splitStr)
     }
+  }
 
-    matrixRows = []
-    inputMatrix = []
+  matrixRow = []
+  inputMatrix = []
 
-    for (i = 0; i < splitStr.length; i++){
-      if (splitStr[i] == "values"){
-        for (j = i; j < splitStr.length; j++){
-          val = splitStr[j].split(',')[0]
-          if (Number.isSafeInteger(parseInt(val))){
-            console.log(val)
-          }
+  for (i = 0; i < splitStr.length; i++){
+    column = 0
+    if (splitStr[i] == "values"){
+      for (j = i; j < splitStr.length; j++){
+        val = splitStr[j].split(',')[0]
+        if (Number.isSafeInteger(parseInt(val))){
+          // console.log(matrixRow + " is the current matrix row")
+          matrixRow.push(val)
+          column++
+          if (column == bounds[1] + 1){
+            inputMatrix.push(matrixRow)
+            column = 0
+            matrixRow = []
+          } 
+          // matrixRow.push(val)
+          // column++
         }
       }
     }
   }
 
+  console.log(inputMatrix)
+
+  // console.log(matrixRow + " is the row")
+
   // A = [[1, 2, 3], [2, 1, 3]]
   // A = [[1, 0, 7], [0, 1, 4]]
   A = [[1, 1, 0, 1, 21], [1, 1, 1, 0, 21], [0, 2, 3, 0, 37], [2, 1, 0, 0, 19]]
+  // console.log(A)
 
   console.log(splitStr)
-  console.log(bounds)
+  console.log(bounds + " are the bounds")
   gauss(bounds[0], bounds[1], A)
 }
 
