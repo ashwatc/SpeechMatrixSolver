@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Speech Matrix Solver</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/shoelace-css/1.0.0-beta16/shoelace.css">
+        <link rel="stylesheet" href="styles.css">
+
+    </head>
+    <body>
+        <div class="container">
+
+            <h1>Speech Matrix Solver</h1>
+            <p class="page-description">A web interface built by Ashwat C., Srisai N., Pranav S., and Seenu M. for the class of Fall 2019 EECS16A.</p>
+
+            <h3 class="no-browser-support">Sorry, Your Browser Doesn't Support the Web Speech API. Try Opening This Demo In Google Chrome.</h3>
+
+            <div class="app"> 
+                <h3>Add a New Matrix</h3>
+                <div class="input-single">
+                    <textarea id="note-textarea" placeholder="Create a new matrix by typing or using voice recognition." rows="6"></textarea>
+                </div>         
+                <button id="start-record-btn" title="Start Recording">Start Recognition</button>
+                <button id="pause-record-btn" title="Pause Recording">Pause Recognition</button>
+                <button id="save-note-btn" title="Save Note">Save Result</button>   
+                <p id="recording-instructions">Press the <strong>Start Recognition</strong> button and allow access.</p>
+                
+                <h3>My Matrices</h3>
+                <ul id="notes">
+                    <li>
+                        <p class="no-notes">You don't have any notes.</p>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="script.js"></script>
+
+    </body>
+</html>
+
+
