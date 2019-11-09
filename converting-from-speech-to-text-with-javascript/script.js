@@ -256,5 +256,11 @@ function gauss(inpStr) {
       }
   }
   // console.log(x)
+
+  for (var i = 0; i < x.length; i++){
+    if (Number.isNaN(x[i])){
+      x[i] = "No solution"
+    }
+  }
   return x;
 }
