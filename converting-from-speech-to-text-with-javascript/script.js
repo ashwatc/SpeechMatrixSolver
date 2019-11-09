@@ -203,11 +203,15 @@ function deleteNote(dateTime) {
 }
 
 function gauss(inpStr) {
-  bounds = inpStr.split('by')
-  bounds[0] = bounds[0].substring(bounds[0].length - 2, bounds[0].length - 1)
-  bounds[0] = parseInt(bounds[0])
-  bounds[1] = bounds[1].substring(1, 2)
-  bounds[1] = parseInt(bounds[1])
+  bounds = []
+  splitStr = inpStr.split(' ')
+  for (i = 0; i < splitStr.length; i++){
+    if (splitStr[i] == "by"){
+      bounds[0] = parseInt(splitStr[i - 1])
+      bounds[1] = parseInt(splitStr[i + 1])
+    }
+  }
+  console.log(splitStr)
   console.log(bounds)
 
   var n = A.length;
