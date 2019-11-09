@@ -101,7 +101,7 @@ $('#save-note-btn').on('click', function(e) {
     // The key is the dateTime with seconds, the value is the content of the note.
 
     saveNote(new Date().toLocaleString(), noteContent);
-    gauss(noteContent)
+    stringToMatrices(noteContent)
 
     // Reset variables and update UI.
     noteContent = '';
@@ -202,7 +202,7 @@ function deleteNote(dateTime) {
   localStorage.removeItem('note-' + dateTime); 
 }
 
-function gauss(inpStr) {
+function stringToMatrices(inpStr){
   bounds = []
   splitStr = inpStr.split(' ')
   for (i = 0; i < splitStr.length; i++){
@@ -211,9 +211,15 @@ function gauss(inpStr) {
       bounds[1] = parseInt(splitStr[i + 1])
     }
   }
+
+  A = [[1, 2, 3], [2, 1, 3]]
+
   console.log(splitStr)
   console.log(bounds)
+  gauss(bounds[0], bounds[1], A)
+}
 
+function gauss(rows, columns, A){
   var n = A.length;
 
   for (var i=0; i<n; i++) {
@@ -255,6 +261,6 @@ function gauss(inpStr) {
           A[k][n] -= A[k][i] * x[i];
       }
   }
-  // console.log(x)
+  console.log(x)
   return x;
 }
