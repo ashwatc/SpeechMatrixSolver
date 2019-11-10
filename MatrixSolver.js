@@ -107,6 +107,7 @@ function gauss(rows, columns, A){
     }
     //Should have RREF at this point according to algorithm
     
+    //Check for infinite/no solutions
     var zeroes = []
     for (var i = 0; i < A[0].length - 1; i ++) {    //checking simplified matrix for dependency
         zeroes.push(0)
@@ -133,7 +134,7 @@ function gauss(rows, columns, A){
     
         
 
-
+    //functions
     function col_all_zeroes(i, j, A){ //Step 1: Change columns until we get to a pivot column (non-zero)
         for (i = 0; i < A.length; i++){ //j is column input
             if (A[i][j] != 0){
