@@ -47,17 +47,14 @@ function gauss(rows, columns, A){
             }
         }
     }
+    console.log(A)
     var zeroes = []
     for (var i = 0; i < A[0].length - 1; i ++) {    //checking simplified matrix for dependency
         zeroes.push(0)
     }
     for (var i = 0; i < n; i ++) {
-        console.log(zeroes)
-        console.log(A[i].slice(0, A[0].length - 1))
-        console.log(A[i].slice(0, A[0].length - 1) == zeroes)
         if (JSON.stringify(A[i].slice(0, A[0].length - 1)) == JSON.stringify(zeroes)){
-            console.log("zeroes")
-            if (A[i][-1] == 0){
+            if (A[i][A[0].length - 1] == 0){
                 console.log("Infinite solutions")
             }else {
                 console.log("No solutions")
