@@ -1,6 +1,7 @@
 A = [[1, 2, 3], [2, -1, 1], [3, 1, 4]]
-console.log(gauss(3, 3, A))
+console.log(gauss(A))
 
+/* Old algo
 function gauss(rows, columns, A) {
     var n = A.length;
     
@@ -47,7 +48,7 @@ function gauss(rows, columns, A) {
             }
         }
     }
-
+///////////////////SEE NEW IMPLEMENTATION FOR UPDATED VERSION OF THIS CHECK///////////
     var zeroes = []
     for (var i = 0; i < A[0].length - 1; i ++) {    //checking simplified matrix for dependency
         zeroes.push(0)
@@ -62,6 +63,7 @@ function gauss(rows, columns, A) {
                 }
         }
     }
+    ///////////////////SEE NEW IMPLEMENTATION FOR UPDATED VERSION OF THIS CHECK///////////
     // Solve equation Ax=b for an upper triangular matrix A
     var x= new Array(n);
     for (var i=n-1; i>-1; i--) {
@@ -71,4 +73,103 @@ function gauss(rows, columns, A) {
         }
     }
     return x;
+}
+
+*/
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//TRYING TO IMPLEMENT GAUSSIAN ELIMINATION ON OUR OWN
+
+//////////////////////////////////////////////////////////////////////
+// TODO: Replace A.length and equivalents with "rows" and "columns" //
+// - Represent infinite solutions with a parameter                  //
+//////////////////////////////////////////////////////////////////////
+
+
+
+A = [[1, 2, 3], [2, 1, 3]]
+function gauss(rows, columns, A){
+    var sol = []
+    var i = 0
+    var j = 0
+    while (i < (rows - 1) && i < columns){ //last column is augmented
+        swap(i, j, A)
+        divide(i, j, A)
+        eliminate(i, j, A)
+        i = i + 1
+        j = j + 1
+    }
+    //Should have RREF at this point according to algorithm
+    
+    //Check for infinite/no solutions
+    var zeroes = []
+    for (var i = 0; i < A[0].length - 1; i ++) {    //checking simplified matrix for dependency
+        zeroes.push(0)
+    }
+    for (var i = 0; i < n; i ++) {
+        if (JSON.stringify(A[i].slice(0, A[0].length - 1)) == JSON.stringify(zeroes)){ //if LHS is zeroes only (ie. row of zeroes for LHS) 
+            if (A[i][A[0].length - 1] == 0){ //if 0 = 0
+                if ((columns - 1) > A.length){ // if more variables than equations
+                    return "Infinte solutions"
+                } else{
+                    return gauss(rows-1, columns, A.splice(i,1))
+                }
+            }else { //if 0 = 1 or something
+                return "No solutions" // check for row comparison
+                }
+        }
+    }
+
+    //if there is a unique solution
+    for (k = 0; k < A.length; k++){
+        sol.push(A[k][columns - 1])
+    }
+    return sol
+    
+        
+
+    //functions
+    function col_all_zeroes(i, j, A){ //Step 1: Change columns until we get to a pivot column (non-zero)
+        for (i = 0; i < A.length; i++){ //j is column input
+            if (A[i][j] != 0){
+                return j
+            }
+        col_all_zeroes(j + 1, A)
+        }
+    }
+
+    function swap(i, j, A){                 //Step 1: Swap i-th row with some 
+        var j =  col_all_zeroes(0, A) //other row so that the first element != 0
+
+        while (A[i][j] == 0){  
+            var first = A[i]   
+            var swap = A[i + 1]
+            A[i] = swap
+            A[i + 1] = first
+            i = i + 1
+    }
+
+    function divide(i, j, A){ //Step 2: Divide all elements in row by Aij
+        var divconstant = A[i][j]
+        A[i][j] = 1
+        for (k = 0; k < A[0].length; k++){
+            A[i][k] = A[i][k] / divconstant
+        }
+    }
+    
+    function eliminate(i, j, A){ //Step 3: Make other elements in the column zero
+        for (k = 0; k < A.length; k++){  //j is which column we are "on"
+            for (l = 0; l < A[l].length; l++){
+                var multiplier = A[k][j]
+                A[k][l] = A[k][l] - multiplier * A[i][l]
+                }
+            }
+        }
+    }
 }
