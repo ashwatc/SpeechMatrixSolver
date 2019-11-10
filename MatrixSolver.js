@@ -1,4 +1,4 @@
-A = [[6, -4, 4], [3, -2, 2]]
+A = [[6, -4, 4], [3, -2, 5]]
 console.log(gauss(2, 3, A))
 
 function gauss(rows, columns, A){
@@ -47,17 +47,16 @@ function gauss(rows, columns, A){
             }
         }
     }
-    console.log(A)
     var zeroes = []
     for (var i = 0; i < A[0].length - 1; i ++) {    //checking simplified matrix for dependency
         zeroes.push(0)
     }
     for (var i = 0; i < n; i ++) {
-        if (JSON.stringify(A[i].slice(0, A[0].length - 1)) == JSON.stringify(zeroes)){
-            if (A[i][A[0].length - 1] == 0){
-                console.log("Infinite solutions")
-            }else {
-                console.log("No solutions")
+        if (JSON.stringify(A[i].slice(0, A[0].length - 1)) == JSON.stringify(zeroes)){ //if LHS is zeroes only (ie. row of zeroes for LHS) 
+            if (A[i][A[0].length - 1] == 0){ //if 0 = 0
+                return "Infinite solutions"
+            }else { //if 0 = 1 or something
+                return "No solutions"
                 }
         }
     }
