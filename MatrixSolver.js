@@ -56,7 +56,7 @@ function gauss(rows, columns, A) {
         if (JSON.stringify(A[i].slice(0, A[0].length - 1)) == JSON.stringify(zeroes)){ //if LHS is zeroes only (ie. row of zeroes for LHS) 
             if (A[i][A[0].length - 1] == 0){ //if 0 = 0
                 //if (A.slice())
-                return "Infinite solutions"  //check for row comparison
+                return gauss(rows-1, columns, A.splice(i,1))
             }else { //if 0 = 1 or something
                 return "No solutions" // check for row comparison
                 }
