@@ -74,7 +74,7 @@ recognition.onerror = function(event) {
 
 $('#start-record-btn').on('click', function(e) {
   if (noteContent.length) {
-    noteContent += ' ';
+    noteContent += '';
   }
   recognition.start();
 });
@@ -94,20 +94,21 @@ $('#solve-matrix-btn').on('click', function(e) {
   recognition.stop();
 
   if(!noteContent.length) {
-    instructions.text('Could not save empty note. Please add a message to your note.');
+    instructions.text('Could not calculate empty input. Please dictate a matrix equation to solve.');
   }
   else {
     // Save note to localStorage.
     // The key is the dateTime with seconds, the value is the content of the note.
 
+    noteContent = "USER INPUT: " + noteContent
+    noteContent += " \n\n --> ANSWER: [" + stringToMatrices(noteContent) + "]"
     saveNote(new Date().toLocaleString(), noteContent);
-    stringToMatrices(noteContent)
 
     // Reset variables and update UI.
     noteContent = '';
     renderNotes(getAllNotes());
     noteTextarea.val('');
-    instructions.text('Note saved successfully.');
+    instructions.text('Result saved successfully.');
   }
       
 })
@@ -124,7 +125,7 @@ notesList.on('click', function(e) {
   e.preventDefault();
   var target = $(e.target);
 
-  // Listen to the selected note.
+  // Listen to the selected answer.
   if(target.hasClass('listen-note')) {
     var content = target.closest('.note').find('.content').text();
     readOutLoud(content);
@@ -169,7 +170,7 @@ function renderNotes(notes) {
       html+= `<li class="note">
         <p class="header">
           <span class="date">${note.date}</span>
-          <a href="#" class="listen-note" title="Listen to Note">Listen to Note</a>
+          <a href="#" class="listen-note" title="Listen to Answer">Listen to Answer</a>
           <a href="#" class="delete-note" title="Delete">Delete</a>
         </p>
         <p class="content">${note.content}</p>
@@ -177,7 +178,7 @@ function renderNotes(notes) {
     });
   }
   else {
-    html = '<li><p class="content">You don\'t have any notes yet.</p></li>';
+    html = '<li><p class="content">You don\'t have any matrices or recent calculations.</p></li>';
   }
   notesList.html(html);
 }
@@ -209,7 +210,10 @@ function deleteNote(dateTime) {
   localStorage.removeItem('note-' + dateTime); 
 }
 
+inputMatrix = []
+
 function stringToMatrices(inpStr){
+  inputMatrix = []
   bounds = []
   splitStr = inpStr.split(' ')
   for (i = 0; i < splitStr.length; i++){
@@ -222,7 +226,6 @@ function stringToMatrices(inpStr){
   }
 
   matrixRow = []
-  inputMatrix = []
 
   for (i = 0; i < splitStr.length; i++){
     column = 0
@@ -250,8 +253,8 @@ function stringToMatrices(inpStr){
   // A = [[1, 0, 7], [0, 1, 4]]
   // *** A = [[1, 1, 0, 1, 21], [1, 1, 1, 0, 21], [0, 2, 3, 0, 37], [2, 1, 0, 0, 19]] ***
 
-  // console.log(inputMatrix)
-  gauss(bounds[0], bounds[1], inputMatrix)
+  console.log(inputMatrix)
+  return gauss(bounds[0], bounds[1], inputMatrix)
 }
 
 // A = [[1, 2, 3], [2, -1, 1], [3, 1, 4]]
