@@ -1,5 +1,5 @@
-A = [[2, 1, 6], [3, -2, 2]]
-console.log(gauss(3, 4, A))
+A = [[6, -4, 4], [3, -2, 2]]
+console.log(gauss(2, 3, A))
 
 function gauss(rows, columns, A){
     var n = A.length;
@@ -47,16 +47,30 @@ function gauss(rows, columns, A){
             }
         }
     }
-  
+    console.log(A)
+    var zeroes = []
+    for (var i = 0; i < A[0].length - 1; i ++) {    //checking simplified matrix for dependency
+        zeroes.push(0)
+    }
+    for (var i = 0; i < n; i ++) {
+        if (A[i].slice(0, A[0].length - 1) === zeroes){
+            console.log(zeroes)
+            if (A[i][-1] == 0){
+                console.log("Infinite solutions")
+            }else {
+                console.log("No solutions")
+                }
+        }
+    }
     // Solve equation Ax=b for an upper triangular matrix A
     var x= new Array(n);
     for (var i=n-1; i>-1; i--) {
         x[i] = A[i][n]/A[i][i];
+        }
         for (var k=i-1; k>-1; k--) {
             A[k][n] -= A[k][i] * x[i];
         }
-    }
-    console.log(A)
+    
   
     for (var i = 0; i < x.length; i++){
       if (Number.isNaN(x[i])){
@@ -64,4 +78,4 @@ function gauss(rows, columns, A){
       }
     }
     return x;
-  }
+}
