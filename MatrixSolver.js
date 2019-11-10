@@ -88,7 +88,7 @@ function gauss(rows, columns, A) {
 
 //////////////////////////////////////////////////////////////////////
 // TODO: Replace A.length and equivalents with "rows" and "columns" //
-// - Integrate infinite solutions and no solutions checks into this //
+// - Represent infinite solutions with a parameter                  //
 //////////////////////////////////////////////////////////////////////
 
 
