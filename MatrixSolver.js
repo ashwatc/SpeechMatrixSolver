@@ -1,7 +1,7 @@
-A = [[6, -4, 4], [3, -2, 5]]
-console.log(gauss(2, 3, A))
+A = [[1, 2, 3], [2, -1, 1], [3, 1, 4]]
+console.log(gauss(3, 3, A))
 
-function gauss(rows, columns, A){
+function gauss(rows, columns, A) {
     var n = A.length;
     
     if (n !== rows) {  // Number of expected rows != number of rows
@@ -27,14 +27,14 @@ function gauss(rows, columns, A){
                 maxRow = k;
             }
         }
-  
+
         // Swap maximum row with current row (column by column)
         for (var k=i; k<n+1; k++) {
             var tmp = A[maxRow][k];
             A[maxRow][k] = A[i][k];
             A[i][k] = tmp;
         }
-  
+
         // Make all rows below this one 0 in current column
         for (k=i+1; k<n; k++) {
             var c = -A[k][i]/A[i][i];
@@ -47,6 +47,7 @@ function gauss(rows, columns, A){
             }
         }
     }
+
     var zeroes = []
     for (var i = 0; i < A[0].length - 1; i ++) {    //checking simplified matrix for dependency
         zeroes.push(0)
@@ -54,9 +55,10 @@ function gauss(rows, columns, A){
     for (var i = 0; i < n; i ++) {
         if (JSON.stringify(A[i].slice(0, A[0].length - 1)) == JSON.stringify(zeroes)){ //if LHS is zeroes only (ie. row of zeroes for LHS) 
             if (A[i][A[0].length - 1] == 0){ //if 0 = 0
-                return "Infinite solutions"
+                //if (A.slice())
+                return "Infinite solutions"  //check for row comparison
             }else { //if 0 = 1 or something
-                return "No solutions"
+                return "No solutions" // check for row comparison
                 }
         }
     }
@@ -64,16 +66,9 @@ function gauss(rows, columns, A){
     var x= new Array(n);
     for (var i=n-1; i>-1; i--) {
         x[i] = A[i][n]/A[i][i];
-        }
         for (var k=i-1; k>-1; k--) {
             A[k][n] -= A[k][i] * x[i];
         }
-    
-  
-    for (var i = 0; i < x.length; i++){
-      if (Number.isNaN(x[i])){
-        x = "No unique solution!"
-      }
     }
     return x;
 }
