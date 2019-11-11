@@ -270,7 +270,10 @@ function stringToMatrices(inpStr){
   // *** A = [[1, 1, 0, 1, 21], [1, 1, 1, 0, 21], [0, 2, 3, 0, 37], [2, 1, 0, 0, 19]] ***
 
   if (numVals != bounds[0] * bounds[1]){
-    return "You didn't give the right amount of values for the size of the matrix that you specified."
+    if (Number.isSafeInteger(bounds[0]) && Number.isSafeInteger(bounds[1])){
+      return "You didn't give the right amount of values for the size of the matrix that you specified."
+    }
+    return "Sorry, I don't understand."
   }
   console.log(inputMatrix)
   return gauss(bounds[0], bounds[1], inputMatrix)
