@@ -98,7 +98,7 @@ function gauss(rows, columns, A) {
 
 var A = [[1, 2, 3], [2, 1, 3]]
 //console.log(A)
-console.log(gauss(2,2, A))
+console.log(gauss(2,3, A))
 
 function gauss(rows, columns, A){
     console.log(A)
