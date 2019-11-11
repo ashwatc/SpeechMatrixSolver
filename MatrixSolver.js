@@ -3,7 +3,6 @@
 // A = [[1, 2, 3], [2, 1, 3]]
 // A = [[1, 0, 7], [0, 1, 4]]
 // *** A = [[1, 1, 0, 1, 21], [1, 1, 1, 0, 21], [0, 2, 3, 0, 37], [2, 1, 0, 0, 19]] ***
-console.log(gauss(A))
 
 /* Old algo
 function gauss(rows, columns, A) {
@@ -98,7 +97,11 @@ function gauss(rows, columns, A) {
 
 
 var A = [[1, 2, 3], [2, 1, 3]]
+//console.log(A)
+console.log(gauss(2,2, A))
+
 function gauss(rows, columns, A){
+    console.log(A)
     var sol = []
     var i = 0
     var j = 0
