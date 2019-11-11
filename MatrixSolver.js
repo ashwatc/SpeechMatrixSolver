@@ -149,7 +149,7 @@ function gauss(rows, columns, A){
     }
 
     function swap(i, j, A){                 //Step 1: Swap i-th row with some
-        var j =  col_all_zeroes(0, A) //other row so that the first element != 0
+        var j =  col_all_zeroes(0, j, A) //other row so that the first element != 0
 
         while (A[i][j] == 0){
             var first = A[i]
