@@ -1,3 +1,3 @@
 # SpeechMatrixSolver
 
-A web interface built by Ashwat C., Srisai N., Pranav S., and Seenu M. for the class of Fall 2019 EECS16A.
+A web interface speech-based matrix solver built by Ashwat C., Srisai N., Pranav S., and Seenu M. for the class of EECS16A in Fall 2019.
