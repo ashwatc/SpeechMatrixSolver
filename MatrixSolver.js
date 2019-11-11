@@ -96,22 +96,24 @@ function gauss(rows, columns, A) {
 
 
 
-var A = [[1, 2, 3], [2, 1, 3]]
+//var A = [[1, 2, 3], [2, 1, 3]]
+var A = [[1, 2, 3], [2, -1, 1], [3, 1, 4]]
+
 //console.log(A)
-console.log(gauss(2,3, A))
+console.log(gauss(3,3, A))
 
 function gauss(rows, columns, A){
     console.log(A)
     var sol = []
     var i = 0
     var j = 0
-    while (i < (rows - 1) && i < columns){ //last column is augmented, we don't want to change it
-        swap(i, j, A)
+    while (i < (rows) && j < columns-1){ //last column is augmented, we don't want to change it
+        swap(i, j, A) //swaps rows until nonzero pivot
         divide(i, j, A)
         for (iter = 0; iter < i; iter++){
             eliminate(iter, j, A)
         }
-        for (iter = i + 1; iter < columns; iter++){
+        for (iter = i + 1; iter < columns-1; iter++){
             eliminate(iter, j, A)
         }
         i = i + 1
@@ -124,7 +126,7 @@ function gauss(rows, columns, A){
     for (var i = 0; i < A[0].length - 1; i ++) {    //checking simplified matrix for dependency
         zeroes.push(0)
     }
-    for (var i = 0; i < n; i ++) {
+    for (var i = 0; i < rows; i ++) {
         if (JSON.stringify(A[i].slice(0, A[0].length - 1)) == JSON.stringify(zeroes)){ //if LHS is zeroes only (ie. row of zeroes for LHS)
             if (A[i][A[0].length - 1] == 0){ //if 0 = 0
                 if ((columns - 1) > A.length){ // if more variables than equations
@@ -146,42 +148,46 @@ function gauss(rows, columns, A){
 
 
 
-    //functions
-    function col_all_zeroes(i, j, A){ //Step 1: Change columns until we get to a pivot column (non-zero)
-        for (i = 0; i < A.length; i++){ //j is column input
-            if (A[i][j] != 0){
-                return j
-            }
-        col_all_zeroes(i, j + 1, A)
+}
+
+//functions
+function col_all_zeroes(i, j, A){ //Step 1: Change columns until we get to a pivot column (non-zero)
+    for (i = 0; i < A.length; i++){ //j is column input
+        if (A[i][j] != 0){
+            return j
         }
-    }
-
-    function swap(i, j, A){                 //Step 1: Swap i-th row with some
-        var j =  col_all_zeroes(0, j, A) //other row so that the first element != 0
-
-        while (A[i][j] == 0){
-            var first = A[i]
-            var swap = A[i + 1]
-            A[i] = swap
-            A[i + 1] = first
-            i = i + 1
-    }
-
-    function divide(i, j, A){ //Step 2: Divide all elements in row by Aij
-        var divconstant = A[i][j]
-        A[i][j] = 1
-        for (k = 0; k < A[0].length; k++){
-            A[i][k] = A[i][k] / divconstant
-        }
-    }
-
-    function eliminate(i, j, A){ //Step 3: Make other elements in the column zero
-        for (k = 0; k < A.length; k++){  //j is which column we are "on"
-            for (l = 0; l < A[l].length; l++){
-                var multiplier = A[k][j]
-                A[k][l] = A[k][l] - multiplier * A[i][l]
-                }
-            }
-        }
+    col_all_zeroes(i, j + 1, A)
     }
 }
+
+function swap(i, j, A){                 //Step 1: Swap i-th row with some
+    var j =  col_all_zeroes(0, j, A) //other row so that the first element != 0
+    var first = A[i]
+
+    if (A[i][j] == 0){ //if the row cannot have a pivot
+        for (curr=0; curr<rows; curr++){ //iterate through other rows until a pivotable row is found
+          var swap = A[i + 1]
+          if (swap[j] != 0){
+            A[i] = swap               //picks the last match
+            A[curr] = first
+          }
+        }
+      }
+    }
+
+function divide(i, j, A){ //Step 2: Divide all elements in row by Aij
+    var divconstant = A[i][j]
+    A[i][j] = 1
+    for (k = 0; k < A[0].length; k++){
+        A[i][k] = A[i][k] / divconstant
+    }
+}
+
+function eliminate(i, j, A){ //Step 3: Make other elements in the column zero
+    for (k = 0; k < A.length; k++){  //j is which column we are "on"
+        for (l = 0; l < A[0].length; l++){
+            var multiplier = A[k][j]
+            A[k][l] = A[k][l] - multiplier * A[i][l]
+            }
+        }
+    }
