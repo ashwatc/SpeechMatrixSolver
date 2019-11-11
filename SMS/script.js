@@ -101,16 +101,23 @@ $('#solve-matrix-btn').on('click', function(e) {
     // The key is the dateTime with seconds, the value is the content of the note.
 
     noteContent = "USER INPUT: " + noteContent
-    noteContent += " \n\n --> ANSWER: [" + stringToMatrices(noteContent) + "]"
-    saveNote(new Date().toLocaleString(), noteContent);
+    answer = stringToMatrices(noteContent)
 
-    // Reset variables and update UI.
-    noteContent = '';
-    renderNotes(getAllNotes());
-    noteTextarea.val('');
-    instructions.text('Result saved successfully.');
+    if (!Number.isSafeInteger(answer[0])){
+      instructions.text("ERROR!: " + answer + " Please check your input and try again.")
+    }
+    else{
+      noteContent += " \n\n --> ANSWER: [" + answer + "]"
+  
+      saveNote(new Date().toLocaleString(), noteContent);
+  
+      // Reset variables and update UI.
+      noteContent = '';
+      renderNotes(getAllNotes());
+      noteTextarea.val('');
+      instructions.text('Result saved successfully.');
+    } 
   }
-      
 })
 
 $('#clear-input-btn').on('click', function(e) {
@@ -215,9 +222,11 @@ inputMatrix = []
 function stringToMatrices(inpStr){
   inputMatrix = []
   bounds = []
+  foundBy = false
   splitStr = inpStr.split(' ')
   for (i = 0; i < splitStr.length; i++){
     if (splitStr[i] == "by"){
+      foundBy = true
       bounds[0] = parseInt(splitStr[i - 1])
       bounds[1] = parseInt(splitStr[i + 1])
       splitStr = splitStr.slice(i + 2, splitStr.length)
@@ -225,7 +234,13 @@ function stringToMatrices(inpStr){
     }
   }
 
+  if (!foundBy){
+    return "Sorry, I don't understand."
+  }
+
   matrixRow = []
+
+  numVals = 0
 
   for (i = 0; i < splitStr.length; i++){
     column = 0
@@ -235,6 +250,7 @@ function stringToMatrices(inpStr){
         if (Number.isSafeInteger(val)){
           // val = parseInt(val)
           matrixRow.push(val)
+          numVals++
           // console.log(matrixRow)
           column++
           if (column == bounds[1]){
@@ -253,6 +269,9 @@ function stringToMatrices(inpStr){
   // A = [[1, 0, 7], [0, 1, 4]]
   // *** A = [[1, 1, 0, 1, 21], [1, 1, 1, 0, 21], [0, 2, 3, 0, 37], [2, 1, 0, 0, 19]] ***
 
+  if (numVals != bounds[0] * bounds[1]){
+    return "You didn't give the right amount of values for the size of the matrix that you specified."
+  }
   console.log(inputMatrix)
   return gauss(bounds[0], bounds[1], inputMatrix)
 }
