@@ -8,7 +8,7 @@ console.log(gauss(A))
 /* Old algo
 function gauss(rows, columns, A) {
     var n = A.length;
-    
+
     if (n !== rows) {  // Number of expected rows != number of rows
         var x = "The dimensions of the expected matrix are different from the dimensions of the given matrix!"
         return x
@@ -58,7 +58,7 @@ function gauss(rows, columns, A) {
         zeroes.push(0)
     }
     for (var i = 0; i < n; i ++) {
-        if (JSON.stringify(A[i].slice(0, A[0].length - 1)) == JSON.stringify(zeroes)){ //if LHS is zeroes only (ie. row of zeroes for LHS) 
+        if (JSON.stringify(A[i].slice(0, A[0].length - 1)) == JSON.stringify(zeroes)){ //if LHS is zeroes only (ie. row of zeroes for LHS)
             if (A[i][A[0].length - 1] == 0){ //if 0 = 0
                 //if (A.slice())
                 return gauss(rows-1, columns, A.splice(i,1))
@@ -110,14 +110,14 @@ function gauss(rows, columns, A){
         j = j + 1
     }
     //Should have RREF at this point according to algorithm
-    
+
     //Check for infinite/no solutions
     var zeroes = []
     for (var i = 0; i < A[0].length - 1; i ++) {    //checking simplified matrix for dependency
         zeroes.push(0)
     }
     for (var i = 0; i < n; i ++) {
-        if (JSON.stringify(A[i].slice(0, A[0].length - 1)) == JSON.stringify(zeroes)){ //if LHS is zeroes only (ie. row of zeroes for LHS) 
+        if (JSON.stringify(A[i].slice(0, A[0].length - 1)) == JSON.stringify(zeroes)){ //if LHS is zeroes only (ie. row of zeroes for LHS)
             if (A[i][A[0].length - 1] == 0){ //if 0 = 0
                 if ((columns - 1) > A.length){ // if more variables than equations
                     return "Infinite solutions"
@@ -135,8 +135,8 @@ function gauss(rows, columns, A){
         sol.push(A[k][columns - 1])
     }
     return sol
-    
-        
+
+
 
     //functions
     function col_all_zeroes(i, j, A){ //Step 1: Change columns until we get to a pivot column (non-zero)
@@ -144,15 +144,15 @@ function gauss(rows, columns, A){
             if (A[i][j] != 0){
                 return j
             }
-        col_all_zeroes(j + 1, A)
+        col_all_zeroes(i, j + 1, A)
         }
     }
 
-    function swap(i, j, A){                 //Step 1: Swap i-th row with some 
+    function swap(i, j, A){                 //Step 1: Swap i-th row with some
         var j =  col_all_zeroes(0, A) //other row so that the first element != 0
 
-        while (A[i][j] == 0){  
-            var first = A[i]   
+        while (A[i][j] == 0){
+            var first = A[i]
             var swap = A[i + 1]
             A[i] = swap
             A[i + 1] = first
@@ -166,7 +166,7 @@ function gauss(rows, columns, A){
             A[i][k] = A[i][k] / divconstant
         }
     }
-    
+
     function eliminate(i, j, A){ //Step 3: Make other elements in the column zero
         for (k = 0; k < A.length; k++){  //j is which column we are "on"
             for (l = 0; l < A[l].length; l++){
