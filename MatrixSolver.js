@@ -97,15 +97,20 @@ function gauss(rows, columns, A) {
 
 
 
-A = [[1, 2, 3], [2, 1, 3]]
+var A = [[1, 2, 3], [2, 1, 3]]
 function gauss(rows, columns, A){
     var sol = []
     var i = 0
     var j = 0
-    while (i < (rows - 1) && i < columns){ //last column is augmented
+    while (i < (rows - 1) && i < columns){ //last column is augmented, we don't want to change it
         swap(i, j, A)
         divide(i, j, A)
-        eliminate(i, j, A)
+        for (iter = 0; iter < i; iter++){
+            eliminate(iter, j, A)
+        }
+        for (iter = i + 1; iter < columns; iter++){
+            eliminate(iter, j, A)
+        }
         i = i + 1
         j = j + 1
     }
