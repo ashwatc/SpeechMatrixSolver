@@ -120,7 +120,7 @@ function gauss(rows, columns, A){
         if (JSON.stringify(A[i].slice(0, A[0].length - 1)) == JSON.stringify(zeroes)){ //if LHS is zeroes only (ie. row of zeroes for LHS) 
             if (A[i][A[0].length - 1] == 0){ //if 0 = 0
                 if ((columns - 1) > A.length){ // if more variables than equations
-                    return "Infinte solutions"
+                    return "Infinite solutions"
                 } else{
                     return gauss(rows-1, columns, A.splice(i,1))
                 }
