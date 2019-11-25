@@ -88,6 +88,9 @@ $('#pause-record-btn').on('click', function(e) {
 // Sync the text inside the text area with the noteContent variable.
 noteTextarea.on('input', function() {
   noteContent = $(this).val();
+  // console.log(noteContent);
+  inputtedMatrix = formatInput(noteContent)
+  // console.log(noteContent)
 })
 
 $('#solve-matrix-btn').on('click', function(e) {
@@ -107,7 +110,9 @@ $('#solve-matrix-btn').on('click', function(e) {
       instructions.text("ERROR!: " + answer + " Please check your input and try again.")
     }
     else{
-      noteContent += " \n\n --> ANSWER: [" + answer + "]"
+      noteContent = "INPUT:\n"
+      noteContent += inputtedMatrix
+      noteContent += "--> \n ANSWER: \n [" + answer + "]"
   
       saveNote(new Date().toLocaleString(), noteContent);
   
@@ -180,7 +185,7 @@ function renderNotes(notes) {
           <a href="#" class="listen-note" title="Listen to Answer">Listen to Answer</a>
           <a href="#" class="delete-note" title="Delete">Delete</a>
         </p>
-        <p class="content">${note.content}</p>
+        <p class="content" style="white-space: pre-line;">${note.content}</p>
       </li>`;    
     });
   }
@@ -277,6 +282,63 @@ function stringToMatrices(inpStr){
   }
   console.log(inputMatrix)
   return gauss(bounds[0], bounds[1], inputMatrix)
+}
+
+function formatInput(inpStr){
+  returnInpMatrix = []
+  bounds = []
+  foundBy = false
+  splitStr = inpStr.split(' ')
+  for (i = 0; i < splitStr.length; i++){
+    if (splitStr[i] == "by"){
+      foundBy = true
+      bounds[0] = parseInt(splitStr[i - 1])
+      bounds[1] = parseInt(splitStr[i + 1])
+      splitStr = splitStr.slice(i + 2, splitStr.length)
+      // console.log(splitStr)
+    }
+  }
+
+  if (!foundBy){
+    return "Sorry, I don't understand."
+  }
+
+  matrixRow = []
+  numVals = 0
+
+  for (i = 0; i < splitStr.length; i++){
+    column = 0
+    if (splitStr[i] == "values"){
+      for (j = i; j < splitStr.length; j++){
+        val = parseInt(splitStr[j].split('.')[0])
+        if (Number.isSafeInteger(val)){
+          // val = parseInt(val)
+          matrixRow.push(val)
+          numVals++
+          column++
+          if (column == bounds[1]){
+            // inputMatrix[row] = matrixRow
+            returnInpMatrix.push(matrixRow)
+            column = 0
+            matrixRow = []
+          }
+        }
+      }
+      break;
+    }
+  }
+  
+  returnInpMatString = ""
+  for (i = 0; i < returnInpMatrix.length; i++){
+    returnInpMatString += "[ "
+    // console.log(returnInpMatrix[i])
+    for (j = 0; j < returnInpMatrix[0].length; j++){
+     returnInpMatString += returnInpMatrix[i][j] + " "
+    }
+    returnInpMatString += "]\n"
+  }
+  console.log(returnInpMatString)
+  return returnInpMatString
 }
 
 // A = [[1, 2, 3], [2, -1, 1], [3, 1, 4]]
