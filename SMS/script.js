@@ -332,7 +332,10 @@ function formatInput(inpStr){
     returnInpMatString += "[ "
     // console.log(returnInpMatrix[i])
     for (j = 0; j < returnInpMatrix[0].length; j++){
-     returnInpMatString += returnInpMatrix[i][j] + " "
+      if (j == returnInpMatrix[0].length - 1){
+        returnInpMatString += " || "
+      }
+      returnInpMatString += returnInpMatrix[i][j] + " "
     }
     returnInpMatString += "]\n"
   }
