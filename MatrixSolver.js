@@ -97,11 +97,11 @@ function gauss(rows, columns, A) {
 
 
 var A = [[0, 2, 3], [2, 1, 3]]
-A = [[1,0,3],[1,0,4]]
-//A= [[0,0,2,6],[0,2,0,8],[2,0,0,10]]
+//A = [[1,0,6],[1,0,3]]
+A= [[0,0,2,6],[0,2,0,8],[2,0,0,10]]
 
 //console.log(A)
-console.log(gauss(2,3, A))
+console.log(gauss(3,4, A))
 
 //algorithm adapted from: https://www.csun.edu/~panferov/math262/262_rref.pdf
 function gauss(rows, columns, A){
@@ -112,7 +112,9 @@ function gauss(rows, columns, A){
         A, j = swap(i, j, A) //swap swaps rows and reassigns column
         console.log("swapped", A)
         //might need conditions to handle end j value
-
+          if(j==null) {
+            return solutions(i,j,A)
+          }
 
           A = divide(i, j, A)
           console.log("divided", A)
@@ -125,32 +127,37 @@ function gauss(rows, columns, A){
 
     }
     console.log("getting out of functions")
+    return solutions(i, j, A);
     //Should have RREF at this point according to algorithm
+    function solutions(i, j, A){
 
-    //Check for infinite/no solutions
-    var zeroes = []
-    for (var i = 0; i < A[0].length - 1; i ++) {    //checking simplified matrix for dependency
-        zeroes.push(0)
-    }
-    for (var i = 0; i < rows; i ++) {
-        if (JSON.stringify(A[i].slice(0, A[0].length - 1)) == JSON.stringify(zeroes)){ //if LHS is zeroes only (ie. row of zeroes for LHS)
-            if (A[i][A[0].length - 1] == 0){ //if 0 = 0
-                if ((columns - 1) > A.length){ // if more variables than equations
-                    return "Infinite solutions"
-                } else{
-                    return gauss(rows-1, columns, A.splice(i,1))
-                }
-            }else { //if 0 = 1 or something
-                return "No solutions" // check for row comparison
-                }
+
+      //Check for infinite/no solutions
+      var zeroes = []
+      for (var i = 0; i < A[0].length - 1; i ++) {    //checking simplified matrix for dependency
+          zeroes.push(0)
         }
-    }
+        for (var i = 0; i < rows; i ++) {
+          if (JSON.stringify(A[i].slice(0, A[0].length - 1)) == JSON.stringify(zeroes)){ //if LHS is zeroes only (ie. row of zeroes for LHS)
+              if (A[i][A[0].length - 1] == 0){ //if 0 = 0
+                  if ((columns - 1) > A.length){ // if more variables than equations
+                      return ["Infinite solutions ", A]
+                    } else{
+                      return gauss(rows-1, columns, A.splice(i,1))
+                    }
+                  }else { //if 0 = 1 or something
+                    return ["No solutions ", A] // check for row comparison
+                  }
+                }
+              }
 
-    //if there is a unique solution
-    for (k = 0; k < A.length; k++){
-        sol.push(A[k][columns - 1])
-    }
-    return sol
+              for (k = 0; k < A.length; k++){
+                sol.push(A[k][columns - 1])
+              }
+              return ["Has Unique solution",sol]
+        }
+
+
 
 
     //functions
@@ -165,8 +172,6 @@ function gauss(rows, columns, A){
 
             }
             j = j + 1
-        //return col_all_zeroes(i, j+1, A) //all columns are zeroes here
-        //fix returning none error
         }
         return (null) //returns None if every element after is 0 within the bounds of the curent row and column (basically everything in the inner square)
       }
@@ -180,9 +185,6 @@ function gauss(rows, columns, A){
           return A, j
         }
 
-        /*if (oldj == j){
-            swap(i + 1, j + 1, A)
-        }*/
         var curr = i               //other row so that the first element != 0
 
         var first = A[i]
@@ -209,7 +211,7 @@ function gauss(rows, columns, A){
 
 
 function eliminate(i, j, A){ //Step 3: Make other elements in the column zero
-        for (var k = 0; k < i; k++){  //j is which column we are "on"
+        for (var k = 0; k < rows; k++){  //j is which column we are "on"
             if (k!=i) {
             var multiplier = A[k][j]
             for (var l = 0; l < A[0].length; l++){
@@ -217,13 +219,6 @@ function eliminate(i, j, A){ //Step 3: Make other elements in the column zero
                 }
             }
           }
-        /*
-        for (var k = i + 1; k < A.length; k++){
-            var multiplier = A[k][j]
-            for (var l = 0; l < A[0].length; l++){
-                A[k][l] = A[k][l] - multiplier * A[i][l]
-                }
-            }*/
         return A
         }
 }
