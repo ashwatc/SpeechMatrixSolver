@@ -98,20 +98,17 @@ function gauss(rows, columns, A) {
 
 //var A = [[1, 2, 3], [2, 1, 3]]
 var A = [[1, 2, 3], [2, -1, 1], [3, 1, 4]]
-A= [[0,1,0],[1,0,0], [0,0,1]]
 
 //console.log(A)
 console.log(gauss(3,3, A))
 
 function gauss(rows, columns, A){
-    //console.log(A)
+    console.log(A)
     var sol = []
     var i = 0
     var j = 0
     while (i < (rows) && j < columns-1){ //last column is augmented, we don't want to change it
-        console.log(A)
         swap(i, j, A) //swaps rows until nonzero pivot
-        console.log(A)
         divide(i, j, A)
         for (iter = 0; iter < i; iter++){
             eliminate(iter, j, A)
@@ -168,7 +165,7 @@ function swap(i, j, A){                 //Step 1: Swap i-th row with some
     var first = A[i]
 
     if (A[i][j] == 0){ //if the row cannot have a pivot
-        for (curr=0; curr<A.length; curr++){ //iterate through other rows until a pivotable row is found
+        for (curr=0; curr<rows; curr++){ //iterate through other rows until a pivotable row is found
           var swap = A[i + 1]
           if (swap[j] != 0){
             A[i] = swap               //picks the last match
