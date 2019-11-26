@@ -98,10 +98,10 @@ function gauss(rows, columns, A) {
 
 var A = [[0, 2, 3], [2, 1, 3]]
 //A = [[1,0,6],[1,0,3]]
-A= [[0,0,2,6],[0,2,0,8],[2,0,0,10]]
+// A= [[0,0,2,6],[0,2,0,8],[2,0,0,10]]
 
 //console.log(A)
-console.log(gauss(3,4, A))
+console.log(gauss(3,4,A))
 
 //algorithm adapted from: https://www.csun.edu/~panferov/math262/262_rref.pdf
 function gauss(rows, columns, A){

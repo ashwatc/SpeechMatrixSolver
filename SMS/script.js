@@ -103,15 +103,20 @@ $('#solve-matrix-btn').on('click', function(e) {
     // The key is the dateTime with seconds, the value is the content of the note.
 
     noteContent = "USER INPUT: " + noteContent
-    answer = stringToMatrices(noteContent)
+    outputType = stringToMatrices(noteContent)[0]
+    answer = stringToMatrices(noteContent)[1]
+    console.log(outputType + " is the output message")
+    console.log(answer + " is the answer")
+    console.log(answer.length + " is the first row length of the answer")
+    console.log(typeof(answer[0]))
 
-    if (!Number.isSafeInteger(answer[0])){
+    if (typeof(answer[0]) == "string"){
       instructions.text("ERROR!: " + answer + " Please check your input and try again.")
     }
     else{
       noteContent = "INPUT:\n"
       noteContent += inputtedMatrix
-      noteContent += "--> \n ANSWER: \n [" + answer + "]"
+      noteContent += "--> \n RESULT: " + outputType + "\n" + formatMatrix(answer)
   
       saveNote(new Date().toLocaleString(), noteContent);
   
@@ -269,10 +274,6 @@ function stringToMatrices(inpStr){
     }
   }
 
-  // A = [[1, 2, 3], [2, 1, 3]]
-  // A = [[1, 0, 7], [0, 1, 4]]
-  // *** A = [[1, 1, 0, 1, 21], [1, 1, 1, 0, 21], [0, 2, 3, 0, 37], [2, 1, 0, 0, 19]] ***
-
   if (numVals != bounds[0] * bounds[1]){
     if (Number.isSafeInteger(bounds[0]) && Number.isSafeInteger(bounds[1])){
       return "You didn't give the right amount of values for the size of the matrix that you specified."
@@ -343,78 +344,159 @@ function formatInput(inpStr){
   return returnInpMatString
 }
 
-// A = [[1, 2, 3], [2, -1, 1], [3, 1, 4]]
-// console.log(gauss(3, 3, A))
-
-function gauss(rows, columns, A) {
-    var n = A.length;
-    
-    if (n !== rows) {  // Number of expected rows != number of rows
-        var x = "The dimensions of the expected matrix are different from the dimensions of the given matrix!"
-        return x
+function formatMatrix(returnInpMatrix){
+  console.log(returnInpMatrix + " is the matrix I have rn")
+  console.log("it has " + returnInpMatrix.length + " rows")
+  console.log("it has " + returnInpMatrix.length[0] + " columns")
+  
+  returnInpMatString = ""
+  if (returnInpMatrix[0].length != undefined){
+    for (i = 0; i < returnInpMatrix.length; i++){
+      returnInpMatString += "[ "
+      // console.log(returnInpMatrix[i])
+      for (j = 0; j < returnInpMatrix[0].length; j++){
+        if (j == returnInpMatrix[0].length - 1){
+          returnInpMatString += " || "
+        }
+        returnInpMatString += returnInpMatrix[i][j] + " "
+      }
+      returnInpMatString += "]\n"
     }
-
-    for (var i = 0; i < n - 1; i ++) {
-        if (A[i].length !== A[i + 1].length) {
-            var x = "The dimensions of the expected matrix are different from the dimensions of the given matrix!"
-            return x
-        }
-
+  }
+  else{
+    for (i = 0; i < returnInpMatrix.length; i++){
+      returnInpMatString += "[ " + returnInpMatrix[i] + " ]\n"
     }
+  }
 
-    for (var i=0; i<n; i++) {
-        // Search for maximum in this column
-        var maxEl = Math.abs(A[i][i]);
-        var maxRow = i;
-        for(var k=i+1; k<n; k++) {
-            if (Math.abs(A[k][i]) > maxEl) {
-                maxEl = Math.abs(A[k][i]);
-                maxRow = k;
-            }
+  console.log(returnInpMatString)
+  return returnInpMatString
+}
+
+var A = [[0, 2, 3], [2, 1, 3]]
+  // A = [[1,0,6],[1,0,3]]
+  // A= [[0,0,2,6],[0,2,0,8],[2,0,0,10]]
+  // A = [[1, 2, 3], [2, 1, 3]]
+  // A = [[1, 0, 7], [0, 1, 4]]
+  // A = [[1, 1, 0, 1, 21], [1, 1, 1, 0, 21], [0, 2, 3, 0, 37], [2, 1, 0, 0, 19]]
+
+
+//algorithm adapted from: https://www.csun.edu/~panferov/math262/262_rref.pdf
+function gauss(rows, columns, A){
+  var sol = []
+  var i = 0
+  var j = 0
+  while (i < (rows) && j < (columns - 1) && (j!= null)) { //last column is augmented, we don't want to change it
+      A, j = swap(i, j, A) //swap swaps rows and reassigns column
+      console.log("swapped", A)
+      //might need conditions to handle end j value
+        if(j==null) {
+          return solutions(i,j,A)
         }
 
-        // Swap maximum row with current row (column by column)
-        for (var k=i; k<n+1; k++) {
-            var tmp = A[maxRow][k];
-            A[maxRow][k] = A[i][k];
-            A[i][k] = tmp;
-        }
+        A = divide(i, j, A)
+        console.log("divided", A)
+        A = eliminate(i, j, A)
+        console.log("eliminated", A)
 
-        // Make all rows below this one 0 in current column
-        for (k=i+1; k<n; k++) {
-            var c = -A[k][i]/A[i][i];
-            for(var j=i; j<n+1; j++) {
-                if (i==j) {
-                    A[k][j] = 0;
-                } else {
-                    A[k][j] += c * A[i][j];
-                }
-            }
-        }
-    }
+        i = i + 1
+        j = j + 1
+        console.log(i, j)
 
+  }
+  console.log("getting out of functions")
+  return solutions(i, j, A);
+  //Should have RREF at this point according to algorithm
+  function solutions(i, j, A){
+
+
+    //Check for infinite/no solutions
     var zeroes = []
     for (var i = 0; i < A[0].length - 1; i ++) {    //checking simplified matrix for dependency
         zeroes.push(0)
-    }
-    for (var i = 0; i < n; i ++) {
-        if (JSON.stringify(A[i].slice(0, A[0].length - 1)) == JSON.stringify(zeroes)){ //if LHS is zeroes only (ie. row of zeroes for LHS) 
+      }
+      for (var i = 0; i < rows; i ++) {
+        if (JSON.stringify(A[i].slice(0, A[0].length - 1)) == JSON.stringify(zeroes)){ //if LHS is zeroes only (ie. row of zeroes for LHS)
             if (A[i][A[0].length - 1] == 0){ //if 0 = 0
-                //if (A.slice())
-                return gauss(rows-1, columns, A.splice(i,1))
-            }else { //if 0 = 1 or something
-                return "No solutions" // check for row comparison
+                if ((columns - 1) > A.length){ // if more variables than equations
+                    return ["Infinite Solutions", A]
+                  } else{
+                    return gauss(rows-1, columns, A.splice(i,1))
+                  }
+                }else { //if 0 = 1 or something
+                  return ["No Solutions", A] // check for row comparison
                 }
-        }
+              }
+            }
+
+            for (k = 0; k < A.length; k++){
+              sol.push(A[k][columns - 1])
+            }
+            return ["Unique Solution", sol]
+      }
+
+
+
+
+  //functions
+  function col_all_zeroes(i, j, A){ //Step 1: Change columns until we get to a pivot column (non-zero)
+      while (j < (columns - 1)){
+          for (iter = i; iter < A.length; iter++){ //j is column input
+              if (A[iter][j] != 0){
+                console.log('here,'+ j)
+                  return j
+              }
+
+
+          }
+          j = j + 1
+      }
+      return (null) //returns None if every element after is 0 within the bounds of the curent row and column (basically everything in the inner square)
     }
-    // Solve equation Ax=b for an upper triangular matrix A
-    var x= new Array(n);
-    for (var i=n-1; i>-1; i--) {
-        x[i] = A[i][n]/A[i][i];
-        for (var k=i-1; k>-1; k--) {
-            A[k][n] -= A[k][i] * x[i];
-        }
+  function swap(i, j, A){                 //Step 1: Swap i-th row with some other row so that element ij is nonzero
+      var oldj = j
+      if (A[i][j] == 0){
+          j = col_all_zeroes(i, j, A)
+      }
+
+      if (j==null){
+        return A, j
+      }
+
+      var curr = i               //other row so that the first element != 0
+
+      var first = A[i]
+      while (A[i][j] == 0 && curr < rows){
+          var swap = A[curr]
+          if (swap[j] != 0){
+            A[i] = swap
+            A[curr] = first
+          }
+          curr = curr + 1
+      }
+      return A, j
+  }
+
+  function divide(i, j, A){ //Step 2: Divide all elements in row by Aij
+      var divconstant = A[i][j]
+      for (iter = 0; iter < A[0].length; iter++){
+          A[i][iter] = A[i][iter] / divconstant
+      }
+      return A
     }
-    console.log(x)
-    return x;
+
+
+
+
+function eliminate(i, j, A){ //Step 3: Make other elements in the column zero
+      for (var k = 0; k < rows; k++){  //j is which column we are "on"
+          if (k!=i) {
+          var multiplier = A[k][j]
+          for (var l = 0; l < A[0].length; l++){
+              A[k][l] = A[k][l] - multiplier * A[i][l]
+              }
+          }
+        }
+      return A
+      }
 }
