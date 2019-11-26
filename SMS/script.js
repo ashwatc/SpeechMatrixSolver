@@ -88,13 +88,12 @@ $('#pause-record-btn').on('click', function(e) {
 // Sync the text inside the text area with the noteContent variable.
 noteTextarea.on('input', function() {
   noteContent = $(this).val();
-  // console.log(noteContent);
-  inputtedMatrix = formatInput(noteContent)
-  // console.log(noteContent)
+  console.log(noteContent)
 })
 
 $('#solve-matrix-btn').on('click', function(e) {
   recognition.stop();
+  inputtedMatrix = formatInput(noteContent)
 
   if(!noteContent.length) {
     instructions.text('Could not calculate empty input. Please dictate a matrix equation to solve.');
@@ -280,7 +279,7 @@ function stringToMatrices(inpStr){
     }
     return "Sorry, I don't understand."
   }
-  console.log(inputMatrix)
+  // console.log(inputMatrix)
   return gauss(bounds[0], bounds[1], inputMatrix)
 }
 
