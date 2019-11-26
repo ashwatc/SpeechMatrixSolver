@@ -141,12 +141,12 @@ function gauss(rows, columns, A){
           if (JSON.stringify(A[i].slice(0, A[0].length - 1)) == JSON.stringify(zeroes)){ //if LHS is zeroes only (ie. row of zeroes for LHS)
               if (A[i][A[0].length - 1] == 0){ //if 0 = 0
                   if ((columns - 1) > A.length){ // if more variables than equations
-                      return ["Infinite solutions ", A]
+                      return ["Infinite solutions", A]
                     } else{
                       return gauss(rows-1, columns, A.splice(i,1))
                     }
                   }else { //if 0 = 1 or something
-                    return ["No solutions ", A] // check for row comparison
+                    return ["No solutions", A] // check for row comparison
                   }
                 }
               }
@@ -154,7 +154,7 @@ function gauss(rows, columns, A){
               for (k = 0; k < A.length; k++){
                 sol.push(A[k][columns - 1])
               }
-              return ["Has Unique solution",sol]
+              return ["Unique solutions", sol]
         }
 
 
