@@ -97,6 +97,7 @@ function gauss(rows, columns, A) {
 
 
 var A = [[0, 2, 3], [2, 1, 3]]
+A= [[3,1,-1,1],[1,-1,1,-3],[2,1,1,0]]
 //A = [[1,0,6],[1,0,3]]
 // A= [[0,0,2,6],[0,2,0,8],[2,0,0,10]]
 
@@ -141,19 +142,25 @@ function gauss(rows, columns, A){
           if (JSON.stringify(A[i].slice(0, A[0].length - 1)) == JSON.stringify(zeroes)){ //if LHS is zeroes only (ie. row of zeroes for LHS)
               if (A[i][A[0].length - 1] == 0){ //if 0 = 0
                   if ((columns - 1) > A.length){ // if more variables than equations
+                      A= convert_dec(rows, columns, A)
                       return ["Infinite solutions", A]
                     } else{
                       return gauss(rows-1, columns, A.splice(i,1))
                     }
                   }else { //if 0 = 1 or something
+                    A= convert_dec(rows, columns, A)
                     return ["No solutions", A] // check for row comparison
                   }
                 }
               }
+              A= convert_dec(rows, columns, A)
+              console.log('formatted'+A)
 
               for (k = 0; k < A.length; k++){
                 sol.push(A[k][columns - 1])
               }
+
+
               return ["Unique solutions", sol]
         }
 
@@ -221,4 +228,24 @@ function eliminate(i, j, A){ //Step 3: Make other elements in the column zero
           }
         return A
         }
+function convert_dec(rows, columns, A){
+  function isInt(value) {
+  return !isNaN(value) &&
+         parseInt(Number(value)) == value &&
+         !isNaN(parseInt(value, 10));
+}
+  for (k=0; k<rows; k++){
+    for (i=0; i<columns; i++){
+      var x = A[k][i]
+      if (!isInt(x)){
+        A[k][i] = parseFloat(Number.parseFloat(x).toFixed(5))
+      }
+
+      /*if(toString(Math.round(x)-x).length>5){
+        A[k][i] = parseFloat(Number.parseFloat(x).toFixed(5))
+      }*/
+    }
+}
+return A
+}
 }
