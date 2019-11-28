@@ -22,19 +22,19 @@ renderNotes(notes);
 
 
 /*-----------------------------
-      Voice Recognition 
+      Voice Recognition
 ------------------------------*/
 
 // If false, the recording will stop after a few seconds of silence.
 // When true, the silence period is longer (about 15 seconds),
-// allowing us to keep recording even when the user pauses. 
+// allowing us to keep recording even when the user pauses.
 recognition.continuous = true;
 
-// This block is called every time the Speech APi captures a line. 
+// This block is called every time the Speech APi captures a line.
 recognition.onresult = function(event) {
 
   // event is a SpeechRecognitionEvent object.
-  // It holds all the lines we have captured so far. 
+  // It holds all the lines we have captured so far.
   // We only need the current one.
   var current = event.resultIndex;
 
@@ -52,7 +52,7 @@ recognition.onresult = function(event) {
   }
 };
 
-recognition.onstart = function() { 
+recognition.onstart = function() {
   instructions.text('Voice recognition activated. Try speaking into the microphone.');
 }
 
@@ -62,14 +62,14 @@ recognition.onspeechend = function() {
 
 recognition.onerror = function(event) {
   if(event.error == 'no-speech') {
-    instructions.text('No speech was detected. Try again.');  
+    instructions.text('No speech was detected. Try again.');
   };
 }
 
 
 
 /*-----------------------------
-      App buttons and input 
+      App buttons and input
 ------------------------------*/
 
 $('#start-record-btn').on('click', function(e) {
@@ -117,15 +117,15 @@ $('#solve-matrix-btn').on('click', function(e) {
       noteContent = "INPUT:\n"
       noteContent += inputtedMatrix
       noteContent += "--> \n RESULT: " + outputType + "\n" + formatMatrix(answer)
-  
+
       saveNote(new Date().toLocaleString(), noteContent);
-  
+
       // Reset variables and update UI.
       noteContent = '';
       renderNotes(getAllNotes());
       noteTextarea.val('');
       instructions.text('Result saved successfully.');
-    } 
+    }
   }
 })
 
@@ -149,7 +149,7 @@ notesList.on('click', function(e) {
 
   // Delete note.
   if(target.hasClass('delete-note')) {
-    var dateTime = target.siblings('.date').text();  
+    var dateTime = target.siblings('.date').text();
     deleteNote(dateTime);
     target.closest('.note').remove();
   }
@@ -158,7 +158,7 @@ notesList.on('click', function(e) {
 
 
 /*-----------------------------
-      Speech Synthesis 
+      Speech Synthesis
 ------------------------------*/
 
 function readOutLoud(message) {
@@ -169,14 +169,14 @@ function readOutLoud(message) {
 	speech.volume = 1;
 	speech.rate = 1;
 	speech.pitch = 1;
-  
+
 	window.speechSynthesis.speak(speech);
 }
 
 
 
 /*-----------------------------
-      Helper Functions 
+      Helper Functions
 ------------------------------*/
 
 function renderNotes(notes) {
@@ -190,7 +190,7 @@ function renderNotes(notes) {
           <a href="#" class="delete-note" title="Delete">Delete</a>
         </p>
         <p class="content" style="white-space: pre-line;">${note.content}</p>
-      </li>`;    
+      </li>`;
     });
   }
   else {
@@ -216,14 +216,14 @@ function getAllNotes() {
         date: key.replace('note-',''),
         content: localStorage.getItem(localStorage.key(i))
       });
-    } 
+    }
   }
   return notes;
 }
 
 
 function deleteNote(dateTime) {
-  localStorage.removeItem('note-' + dateTime); 
+  localStorage.removeItem('note-' + dateTime);
 }
 
 inputMatrix = []
@@ -327,7 +327,7 @@ function formatInput(inpStr){
       break;
     }
   }
-  
+
   returnInpMatString = ""
   for (i = 0; i < returnInpMatrix.length; i++){
     returnInpMatString += "[ "
@@ -348,7 +348,7 @@ function formatMatrix(returnInpMatrix){
   console.log(returnInpMatrix + " is the matrix I have rn")
   console.log("it has " + returnInpMatrix.length + " rows")
   console.log("it has " + returnInpMatrix.length[0] + " columns")
-  
+
   returnInpMatString = ""
   if (returnInpMatrix[0].length != undefined){
     for (i = 0; i < returnInpMatrix.length; i++){
@@ -383,120 +383,141 @@ var A = [[0, 2, 3], [2, 1, 3]]
 
 //algorithm adapted from: https://www.csun.edu/~panferov/math262/262_rref.pdf
 function gauss(rows, columns, A){
-  var sol = []
-  var i = 0
-  var j = 0
-  while (i < (rows) && j < (columns - 1) && (j!= null)) { //last column is augmented, we don't want to change it
-      A, j = swap(i, j, A) //swap swaps rows and reassigns column
-      console.log("swapped", A)
-      //might need conditions to handle end j value
-        if(j==null) {
-          return solutions(i,j,A)
+    var sol = []
+    var i = 0
+    var j = 0
+    while (i < (rows) && j < (columns - 1) && (j!= null)) { //last column is augmented, we don't want to change it
+        A, j = swap(i, j, A) //swap swaps rows and reassigns column
+        console.log("swapped", A)
+        //might need conditions to handle end j value
+          if(j==null) {
+            return solutions(i,j,A)
+          }
+
+          A = divide(i, j, A)
+          console.log("divided", A)
+          A = eliminate(i, j, A)
+          console.log("eliminated", A)
+
+          i = i + 1
+          j = j + 1
+          console.log(i, j)
+
+    }
+    console.log("getting out of functions")
+    return solutions(i, j, A);
+    //Should have RREF at this point according to algorithm
+    function solutions(i, j, A){
+
+
+      //Check for infinite/no solutions
+      var zeroes = []
+      for (var i = 0; i < A[0].length - 1; i ++) {    //checking simplified matrix for dependency
+          zeroes.push(0)
         }
-
-        A = divide(i, j, A)
-        console.log("divided", A)
-        A = eliminate(i, j, A)
-        console.log("eliminated", A)
-
-        i = i + 1
-        j = j + 1
-        console.log(i, j)
-
-  }
-  console.log("getting out of functions")
-  return solutions(i, j, A);
-  //Should have RREF at this point according to algorithm
-  function solutions(i, j, A){
-
-
-    //Check for infinite/no solutions
-    var zeroes = []
-    for (var i = 0; i < A[0].length - 1; i ++) {    //checking simplified matrix for dependency
-        zeroes.push(0)
-      }
-      for (var i = 0; i < rows; i ++) {
-        if (JSON.stringify(A[i].slice(0, A[0].length - 1)) == JSON.stringify(zeroes)){ //if LHS is zeroes only (ie. row of zeroes for LHS)
-            if (A[i][A[0].length - 1] == 0){ //if 0 = 0
-                if ((columns - 1) > A.length){ // if more variables than equations
-                    return ["Infinite Solutions", A]
-                  } else{
-                    return gauss(rows-1, columns, A.splice(i,1))
+        for (var i = 0; i < rows; i ++) {
+          if (JSON.stringify(A[i].slice(0, A[0].length - 1)) == JSON.stringify(zeroes)){ //if LHS is zeroes only (ie. row of zeroes for LHS)
+              if (A[i][A[0].length - 1] == 0){ //if 0 = 0
+                  if ((columns - 1) > A.length){ // if more variables than equations
+                      A= convert_dec(rows, columns, A)
+                      return ["Infinite solutions", A]
+                    } else{
+                      return gauss(rows-1, columns, A.splice(i,1))
+                    }
+                  }else { //if 0 = 1 or something
+                    A= convert_dec(rows, columns, A)
+                    return ["No solutions", A] // check for row comparison
                   }
-                }else { //if 0 = 1 or something
-                  return ["No Solutions", A] // check for row comparison
                 }
               }
-            }
+              A= convert_dec(rows, columns, A)
 
-            for (k = 0; k < A.length; k++){
-              sol.push(A[k][columns - 1])
-            }
-            return ["Unique Solution", sol]
-      }
-
-
-
-
-  //functions
-  function col_all_zeroes(i, j, A){ //Step 1: Change columns until we get to a pivot column (non-zero)
-      while (j < (columns - 1)){
-          for (iter = i; iter < A.length; iter++){ //j is column input
-              if (A[iter][j] != 0){
-                console.log('here,'+ j)
-                  return j
+              for (k = 0; k < A.length; k++){
+                sol.push(A[k][columns - 1])
               }
 
+              console.log('formatted'+sol)
+              return ["Unique solutions", sol]
+        }
 
-          }
-          j = j + 1
-      }
-      return (null) //returns None if every element after is 0 within the bounds of the curent row and column (basically everything in the inner square)
-    }
-  function swap(i, j, A){                 //Step 1: Swap i-th row with some other row so that element ij is nonzero
-      var oldj = j
-      if (A[i][j] == 0){
-          j = col_all_zeroes(i, j, A)
-      }
 
-      if (j==null){
+
+
+    //functions
+    function col_all_zeroes(i, j, A){ //Step 1: Change columns until we get to a pivot column (non-zero)
+        while (j < (columns - 1)){
+            for (iter = i; iter < A.length; iter++){ //j is column input
+                if (A[iter][j] != 0){
+                  console.log('here,'+ j)
+                    return j
+                }
+
+
+            }
+            j = j + 1
+        }
+        return (null) //returns None if every element after is 0 within the bounds of the curent row and column (basically everything in the inner square)
+      }
+    function swap(i, j, A){                 //Step 1: Swap i-th row with some other row so that element ij is nonzero
+        var oldj = j
+        if (A[i][j] == 0){
+            j = col_all_zeroes(i, j, A)
+        }
+
+        if (j==null){
+          return A, j
+        }
+
+        var curr = i               //other row so that the first element != 0
+
+        var first = A[i]
+        while (A[i][j] == 0 && curr < rows){
+            var swap = A[curr]
+            if (swap[j] != 0){
+              A[i] = swap
+              A[curr] = first
+            }
+            curr = curr + 1
+        }
         return A, j
-      }
-
-      var curr = i               //other row so that the first element != 0
-
-      var first = A[i]
-      while (A[i][j] == 0 && curr < rows){
-          var swap = A[curr]
-          if (swap[j] != 0){
-            A[i] = swap
-            A[curr] = first
-          }
-          curr = curr + 1
-      }
-      return A, j
-  }
-
-  function divide(i, j, A){ //Step 2: Divide all elements in row by Aij
-      var divconstant = A[i][j]
-      for (iter = 0; iter < A[0].length; iter++){
-          A[i][iter] = A[i][iter] / divconstant
-      }
-      return A
     }
+
+    function divide(i, j, A){ //Step 2: Divide all elements in row by Aij
+        var divconstant = A[i][j]
+        for (iter = 0; iter < A[0].length; iter++){
+            A[i][iter] = A[i][iter] / divconstant
+        }
+        return A
+      }
 
 
 
 
 function eliminate(i, j, A){ //Step 3: Make other elements in the column zero
-      for (var k = 0; k < rows; k++){  //j is which column we are "on"
-          if (k!=i) {
-          var multiplier = A[k][j]
-          for (var l = 0; l < A[0].length; l++){
-              A[k][l] = A[k][l] - multiplier * A[i][l]
-              }
+        for (var k = 0; k < rows; k++){  //j is which column we are "on"
+            if (k!=i) {
+            var multiplier = A[k][j]
+            for (var l = 0; l < A[0].length; l++){
+                A[k][l] = A[k][l] - multiplier * A[i][l]
+                }
+            }
           }
+        return A
         }
-      return A
+function convert_dec(rows, columns, A){
+  function isInt(value) {
+  return !isNaN(value) &&
+         parseInt(Number(value)) == value &&
+         !isNaN(parseInt(value, 10));
+}
+  for (k=0; k<rows; k++){
+    for (i=0; i<columns; i++){
+      var x = A[k][i]
+      if (!isInt(x)){
+        A[k][i] = parseFloat(Number.parseFloat(x).toFixed(5))
       }
+    }
+}
+return A
+}
 }
