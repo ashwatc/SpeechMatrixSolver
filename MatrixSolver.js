@@ -141,7 +141,7 @@ function gauss(rows, columns, A){
         for (var i = 0; i < rows; i ++) {
           if (JSON.stringify(A[i].slice(0, A[0].length - 1)) == JSON.stringify(zeroes)){ //if LHS is zeroes only (ie. row of zeroes for LHS)
               if (A[i][A[0].length - 1] == 0){ //if 0 = 0
-                  if ((columns - 1) > A.length){ // if more variables than equations
+                  if ((columns) > A.length){ // if more variables than equations
                       A= convert_dec(rows, columns, A)
                       return ["Infinite solutions", A]
                     } else{
