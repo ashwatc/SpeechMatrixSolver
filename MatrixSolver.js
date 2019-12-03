@@ -97,12 +97,12 @@ function gauss(rows, columns, A) {
 
 
 var A = [[0, 2, 3], [2, 1, 3]]
-A= [[1,-2,1,-6],[2,-3,0,-7],[-1,3,-3,11]]
+A= [[1,-2,1,-6],[2,-3,0,-7], [-2, 6, -6, 22], [-2, 6, -6, 22], [-2, 6, -6, 22]]
 //A = [[1,0,6],[1,0,3]]
 // A= [[0,0,2,6],[0,2,0,8],[2,0,0,10]]
 
 //console.log(A)
-console.log(gauss(3,4,A))
+console.log(gauss(5,4,A))
 
 //algorithm adapted from: https://www.csun.edu/~panferov/math262/262_rref.pdf
 function gauss(rows, columns, A){
@@ -113,7 +113,7 @@ function gauss(rows, columns, A){
         A, j = swap(i, j, A) //swap swaps rows and reassigns column
         console.log("swapped", A)
         //might need conditions to handle end j value
-          if(j==null) {
+         if(j==null) {
             return solutions(i,j,A)
           }
 
@@ -145,7 +145,8 @@ function gauss(rows, columns, A){
                       A= convert_dec(rows, columns, A)
                       return ["Infinite solutions", A]
                     } else{
-                      return gauss(rows-1, columns, A.splice(i,1))
+                      A.splice(i, 1)
+                      return gauss(rows-1, columns, A)
                     }
                   }else { //if 0 = 1 or something
                     A= convert_dec(rows, columns, A)
@@ -153,8 +154,6 @@ function gauss(rows, columns, A){
                   }
                 }
               }
-              A= convert_dec(rows, columns, A)
-              console.log('formatted'+A)
 
               for (k = 0; k < A.length; k++){
                 sol.push(A[k][columns - 1])
