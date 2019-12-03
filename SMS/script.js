@@ -56,9 +56,9 @@ recognition.onstart = function() {
   instructions.text('Voice recognition activated. Try speaking into the microphone.');
 }
 
-recognition.onspeechend = function() {
-  instructions.text('You were quiet for a while so voice recognition turned itself off.');
-}
+// recognition.onspeechend = function() {
+//   instructions.text('You were quiet for a while so voice recognition turned itself off.');
+// }
 
 recognition.onerror = function(event) {
   if(event.error == 'no-speech') {
@@ -74,7 +74,8 @@ recognition.onerror = function(event) {
 
 $('#start-record-btn').on('click', function(e) {
   if (noteContent.length) {
-    noteContent += '';
+    noteContent = '';
+    noteTextarea.val('')
   }
   recognition.start();
 });
@@ -105,13 +106,14 @@ $('#solve-matrix-btn').on('click', function(e) {
     noteContent = "USER INPUT: " + noteContent
     outputType = stringToMatrices(noteContent)[0]
     answer = stringToMatrices(noteContent)[1]
-    console.log(outputType + " is the output message")
-    console.log(answer + " is the answer")
-    console.log(answer.length + " is the first row length of the answer")
-    console.log(typeof(answer[0]) + " is the type of answer[0]")
+    // console.log(outputType + " is the output message")
+    // console.log(answer + " is the answer")
+    // console.log(answer.length + " is the first row length of the answer")
+    // console.log(typeof(answer[0]) + " is the type of answer[0]")
 
     if (typeof(answer[0]) == "string"){
-      // console.log("I GOT HERE BRUHHHH")
+      // noteContent = "Something's wrong with this --> " + noteContent
+      noteTextarea.val("Something's wrong with this --> " + noteContent)
       instructions.text("ERROR!: " + answer + " Please check your input and try again.")
     }
     else{
@@ -125,7 +127,7 @@ $('#solve-matrix-btn').on('click', function(e) {
       noteContent = '';
       renderNotes(getAllNotes());
       noteTextarea.val('');
-      instructions.text('Result saved successfully.');
+      instructions.text('Result saved successfully at ' + new Date().toLocaleString());
     }
   }
 })
@@ -277,9 +279,9 @@ function stringToMatrices(inpStr){
 
   if (numVals != bounds[0] * bounds[1]){
     if (Number.isSafeInteger(bounds[0]) && Number.isSafeInteger(bounds[1])){
-      return "You didn't give the right amount of values for the size of the matrix that you specified."
+      return ["", "You didn't give the right amount of values for the matrix size you specified."]
     }
-    return "Sorry, I don't understand."
+    return ["", "Sorry, I don't understand."]
   }
   // console.log(inputMatrix)
   return gauss(bounds[0], bounds[1], inputMatrix)
