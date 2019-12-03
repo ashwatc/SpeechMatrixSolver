@@ -107,7 +107,6 @@ $('#solve-matrix-btn').on('click', function(e) {
     answer = stringToMatrices(noteContent)[1]
 
     if (typeof(answer[0]) == "string"){
-      // noteContent = "Something's wrong with this --> " + noteContent
       noteTextarea.val("Something's wrong with this --> " + noteContent)
       instructions.text("ERROR!: " + answer + " Please check your input and try again.")
     }
