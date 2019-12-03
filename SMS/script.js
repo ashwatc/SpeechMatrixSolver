@@ -233,7 +233,6 @@ function stringToMatrices(inpStr){
   splitStr = inpStr.split(' ')
   for (i = 0; i < splitStr.length; i++){
     if (splitStr[i] == "by" || splitStr[i] == "x"){
-      console.log("i was found")
       foundBy = true
       bounds[0] = parseInt(splitStr[i - 1])
       bounds[1] = parseInt(splitStr[i + 1])
