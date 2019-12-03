@@ -436,7 +436,7 @@ function gauss(rows, columns, A){
                   }
                 }
               }
-
+              A = convert_dec(rows, columns, A)
               for (k = 0; k < A.length; k++){
                 sol.push(A[k][columns - 1])
               }
