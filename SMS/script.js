@@ -108,9 +108,10 @@ $('#solve-matrix-btn').on('click', function(e) {
     console.log(outputType + " is the output message")
     console.log(answer + " is the answer")
     console.log(answer.length + " is the first row length of the answer")
-    console.log(typeof(answer[0]))
+    console.log(typeof(answer[0]) + " is the type of answer[0]")
 
     if (typeof(answer[0]) == "string"){
+      // console.log("I GOT HERE BRUHHHH")
       instructions.text("ERROR!: " + answer + " Please check your input and try again.")
     }
     else{
@@ -244,7 +245,7 @@ function stringToMatrices(inpStr){
   }
 
   if (!foundBy){
-    return "Sorry, I don't understand."
+    return ["", "Sorry, I don't understand."]
   }
 
   matrixRow = []
@@ -383,140 +384,142 @@ var A = [[0, 2, 3], [2, 1, 3]]
 
 //algorithm adapted from: https://www.csun.edu/~panferov/math262/262_rref.pdf
 function gauss(rows, columns, A){
-    var sol = []
-    var i = 0
-    var j = 0
-    while (i < (rows) && j < (columns - 1) && (j!= null)) { //last column is augmented, we don't want to change it
-        A, j = swap(i, j, A) //swap swaps rows and reassigns column
-        console.log("swapped", A)
-        //might need conditions to handle end j value
-          if(j==null) {
-            return solutions(i,j,A)
-          }
-
-          A = divide(i, j, A)
-          console.log("divided", A)
-          A = eliminate(i, j, A)
-          console.log("eliminated", A)
-
-          i = i + 1
-          j = j + 1
-          console.log(i, j)
-
-    }
-    console.log("getting out of functions")
-    return solutions(i, j, A);
-    //Should have RREF at this point according to algorithm
-    function solutions(i, j, A){
-
-
-      //Check for infinite/no solutions
-      var zeroes = []
-      for (var i = 0; i < A[0].length - 1; i ++) {    //checking simplified matrix for dependency
-          zeroes.push(0)
+  var sol = []
+  var i = 0
+  var j = 0
+  while (i < (rows) && j < (columns - 1) && (j!= null)) { //last column is augmented, we don't want to change it
+      A, j = swap(i, j, A) //swap swaps rows and reassigns column
+      console.log("swapped", A)
+      //might need conditions to handle end j value
+        if(j==null) {
+          return solutions(i,j,A)
         }
-        for (var i = 0; i < rows; i ++) {
-          if (JSON.stringify(A[i].slice(0, A[0].length - 1)) == JSON.stringify(zeroes)){ //if LHS is zeroes only (ie. row of zeroes for LHS)
-              if (A[i][A[0].length - 1] == 0){ //if 0 = 0
-                  if ((columns - 1) > A.length){ // if more variables than equations
-                      A= convert_dec(rows, columns, A)
-                      return ["Infinite solutions", A]
-                    } else{
-                      return gauss(rows-1, columns, A.splice(i,1))
-                    }
-                  }else { //if 0 = 1 or something
+
+        A = divide(i, j, A)
+        console.log("divided", A)
+        A = eliminate(i, j, A)
+        console.log("eliminated", A)
+
+        i = i + 1
+        j = j + 1
+        console.log(i, j)
+
+  }
+  console.log("getting out of functions")
+  return solutions(i, j, A);
+  //Should have RREF at this point according to algorithm
+  function solutions(i, j, A){
+
+
+    //Check for infinite/no solutions
+    var zeroes = []
+    for (var i = 0; i < A[0].length - 1; i ++) {    //checking simplified matrix for dependency
+        zeroes.push(0)
+      }
+      for (var i = 0; i < rows; i ++) {
+        if (JSON.stringify(A[i].slice(0, A[0].length - 1)) == JSON.stringify(zeroes)){ //if LHS is zeroes only (ie. row of zeroes for LHS)
+            if (A[i][A[0].length - 1] == 0){ //if 0 = 0
+                if ((columns) > A.length){ // if more variables than equations
                     A= convert_dec(rows, columns, A)
-                    return ["No solutions", A] // check for row comparison
+                    return ["Infinite solutions", A]
+                  } else{
+                    return gauss(rows-1, columns, A.splice(i,1))
                   }
+                }else { //if 0 = 1 or something
+                  A= convert_dec(rows, columns, A)
+                  return ["No solutions", A] // check for row comparison
                 }
               }
-              A= convert_dec(rows, columns, A)
-
-              for (k = 0; k < A.length; k++){
-                sol.push(A[k][columns - 1])
-              }
-
-              console.log('formatted'+sol)
-              return ["Unique solutions", sol]
-        }
-
-
-
-
-    //functions
-    function col_all_zeroes(i, j, A){ //Step 1: Change columns until we get to a pivot column (non-zero)
-        while (j < (columns - 1)){
-            for (iter = i; iter < A.length; iter++){ //j is column input
-                if (A[iter][j] != 0){
-                  console.log('here,'+ j)
-                    return j
-                }
-
-
             }
-            j = j + 1
-        }
-        return (null) //returns None if every element after is 0 within the bounds of the curent row and column (basically everything in the inner square)
+            A= convert_dec(rows, columns, A)
+            console.log('formatted'+A)
+
+            for (k = 0; k < A.length; k++){
+              sol.push(A[k][columns - 1])
+            }
+
+
+            return ["Unique solutions", sol]
       }
-    function swap(i, j, A){                 //Step 1: Swap i-th row with some other row so that element ij is nonzero
-        var oldj = j
-        if (A[i][j] == 0){
-            j = col_all_zeroes(i, j, A)
-        }
 
-        if (j==null){
-          return A, j
-        }
 
-        var curr = i               //other row so that the first element != 0
 
-        var first = A[i]
-        while (A[i][j] == 0 && curr < rows){
-            var swap = A[curr]
-            if (swap[j] != 0){
-              A[i] = swap
-              A[curr] = first
-            }
-            curr = curr + 1
-        }
+
+  //functions
+  function col_all_zeroes(i, j, A){ //Step 1: Change columns until we get to a pivot column (non-zero)
+      while (j < (columns - 1)){
+          for (iter = i; iter < A.length; iter++){ //j is column input
+              if (A[iter][j] != 0){
+                console.log('here,'+ j)
+                  return j
+              }
+
+
+          }
+          j = j + 1
+      }
+      return (null) //returns None if every element after is 0 within the bounds of the curent row and column (basically everything in the inner square)
+    }
+  function swap(i, j, A){                 //Step 1: Swap i-th row with some other row so that element ij is nonzero
+      var oldj = j
+      if (A[i][j] == 0){
+          j = col_all_zeroes(i, j, A)
+      }
+
+      if (j==null){
         return A, j
+      }
+
+      var curr = i               //other row so that the first element != 0
+
+      var first = A[i]
+      while (A[i][j] == 0 && curr < rows){
+          var swap = A[curr]
+          if (swap[j] != 0){
+            A[i] = swap
+            A[curr] = first
+          }
+          curr = curr + 1
+      }
+      return A, j
+  }
+
+  function divide(i, j, A){ //Step 2: Divide all elements in row by Aij
+      var divconstant = A[i][j]
+      for (iter = 0; iter < A[0].length; iter++){
+          A[i][iter] = A[i][iter] / divconstant
+      }
+      return A
     }
 
-    function divide(i, j, A){ //Step 2: Divide all elements in row by Aij
-        var divconstant = A[i][j]
-        for (iter = 0; iter < A[0].length; iter++){
-            A[i][iter] = A[i][iter] / divconstant
+
+
+
+  function eliminate(i, j, A){ //Step 3: Make other elements in the column zero
+    for (var k = 0; k < rows; k++){  //j is which column we are "on"
+        if (k!=i) {
+        var multiplier = A[k][j]
+        for (var l = 0; l < A[0].length; l++){
+          A[k][l] = A[k][l] - multiplier * A[i][l]
         }
-        return A
       }
+    }
+  return A
+  }
 
-
-
-
-function eliminate(i, j, A){ //Step 3: Make other elements in the column zero
-        for (var k = 0; k < rows; k++){  //j is which column we are "on"
-            if (k!=i) {
-            var multiplier = A[k][j]
-            for (var l = 0; l < A[0].length; l++){
-                A[k][l] = A[k][l] - multiplier * A[i][l]
-                }
-            }
-          }
-        return A
-        }
-function convert_dec(rows, columns, A){
-  function isInt(value) {
-  return !isNaN(value) &&
-         parseInt(Number(value)) == value &&
-         !isNaN(parseInt(value, 10));
-}
+  function convert_dec(rows, columns, A){
+    function isInt(value) {
+    return !isNaN(value) &&
+          parseInt(Number(value)) == value &&
+          !isNaN(parseInt(value, 10));
+  }
   for (k=0; k<rows; k++){
     for (i=0; i<columns; i++){
       var x = A[k][i]
       if (!isInt(x)){
         A[k][i] = parseFloat(Number.parseFloat(x).toFixed(5))
       }
-    }
+  }
 }
 return A
 }

@@ -217,35 +217,32 @@ function gauss(rows, columns, A){
 
 
 
-function eliminate(i, j, A){ //Step 3: Make other elements in the column zero
-        for (var k = 0; k < rows; k++){  //j is which column we are "on"
-            if (k!=i) {
-            var multiplier = A[k][j]
-            for (var l = 0; l < A[0].length; l++){
-                A[k][l] = A[k][l] - multiplier * A[i][l]
-                }
-            }
+    function eliminate(i, j, A){ //Step 3: Make other elements in the column zero
+      for (var k = 0; k < rows; k++){  //j is which column we are "on"
+          if (k!=i) {
+          var multiplier = A[k][j]
+          for (var l = 0; l < A[0].length; l++){
+            A[k][l] = A[k][l] - multiplier * A[i][l]
           }
-        return A
         }
-function convert_dec(rows, columns, A){
-  function isInt(value) {
-  return !isNaN(value) &&
-         parseInt(Number(value)) == value &&
-         !isNaN(parseInt(value, 10));
-}
-  for (k=0; k<rows; k++){
-    for (i=0; i<columns; i++){
-      var x = A[k][i]
-      if (!isInt(x)){
-        A[k][i] = parseFloat(Number.parseFloat(x).toFixed(5))
       }
-
-      /*if(toString(Math.round(x)-x).length>5){
-        A[k][i] = parseFloat(Number.parseFloat(x).toFixed(5))
-      }*/
+    return A
     }
-}
-return A
-}
+
+    function convert_dec(rows, columns, A){
+      function isInt(value) {
+      return !isNaN(value) &&
+            parseInt(Number(value)) == value &&
+            !isNaN(parseInt(value, 10));
+    }
+    for (k=0; k<rows; k++){
+      for (i=0; i<columns; i++){
+        var x = A[k][i]
+        if (!isInt(x)){
+          A[k][i] = parseFloat(Number.parseFloat(x).toFixed(5))
+        }
+    }
+  }
+  return A
+  }
 }
