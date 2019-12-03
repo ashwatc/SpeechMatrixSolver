@@ -89,7 +89,6 @@ $('#pause-record-btn').on('click', function(e) {
 // Sync the text inside the text area with the noteContent variable.
 noteTextarea.on('input', function() {
   noteContent = $(this).val();
-  console.log(noteContent)
 })
 
 $('#solve-matrix-btn').on('click', function(e) {
@@ -106,10 +105,6 @@ $('#solve-matrix-btn').on('click', function(e) {
     noteContent = "USER INPUT: " + noteContent
     outputType = stringToMatrices(noteContent)[0]
     answer = stringToMatrices(noteContent)[1]
-    // console.log(outputType + " is the output message")
-    // console.log(answer + " is the answer")
-    // console.log(answer.length + " is the first row length of the answer")
-    // console.log(typeof(answer[0]) + " is the type of answer[0]")
 
     if (typeof(answer[0]) == "string"){
       // noteContent = "Something's wrong with this --> " + noteContent
@@ -242,7 +237,6 @@ function stringToMatrices(inpStr){
       bounds[0] = parseInt(splitStr[i - 1])
       bounds[1] = parseInt(splitStr[i + 1])
       splitStr = splitStr.slice(i + 2, splitStr.length)
-      // console.log(splitStr)
     }
   }
 
@@ -260,13 +254,10 @@ function stringToMatrices(inpStr){
       for (j = i; j < splitStr.length; j++){
         val = parseInt(splitStr[j].split('.')[0])
         if (Number.isSafeInteger(val)){
-          // val = parseInt(val)
           matrixRow.push(val)
           numVals++
-          // console.log(matrixRow)
           column++
           if (column == bounds[1]){
-            // inputMatrix[row] = matrixRow
             inputMatrix.push(matrixRow)
             column = 0
             matrixRow = []
@@ -283,7 +274,6 @@ function stringToMatrices(inpStr){
     }
     return ["", "Sorry, I don't understand."]
   }
-  // console.log(inputMatrix)
   return gauss(bounds[0], bounds[1], inputMatrix)
 }
 
@@ -298,7 +288,6 @@ function formatInput(inpStr){
       bounds[0] = parseInt(splitStr[i - 1])
       bounds[1] = parseInt(splitStr[i + 1])
       splitStr = splitStr.slice(i + 2, splitStr.length)
-      // console.log(splitStr)
     }
   }
 
@@ -315,12 +304,10 @@ function formatInput(inpStr){
       for (j = i; j < splitStr.length; j++){
         val = parseInt(splitStr[j].split('.')[0])
         if (Number.isSafeInteger(val)){
-          // val = parseInt(val)
           matrixRow.push(val)
           numVals++
           column++
           if (column == bounds[1]){
-            // inputMatrix[row] = matrixRow
             returnInpMatrix.push(matrixRow)
             column = 0
             matrixRow = []
@@ -334,7 +321,6 @@ function formatInput(inpStr){
   returnInpMatString = ""
   for (i = 0; i < returnInpMatrix.length; i++){
     returnInpMatString += "[ "
-    // console.log(returnInpMatrix[i])
     for (j = 0; j < returnInpMatrix[0].length; j++){
       if (j == returnInpMatrix[0].length - 1){
         returnInpMatString += " || "
@@ -343,20 +329,14 @@ function formatInput(inpStr){
     }
     returnInpMatString += "]\n"
   }
-  console.log(returnInpMatString)
   return returnInpMatString
 }
 
 function formatMatrix(returnInpMatrix){
-  console.log(returnInpMatrix + " is the matrix I have rn")
-  console.log("it has " + returnInpMatrix.length + " rows")
-  console.log("it has " + returnInpMatrix.length[0] + " columns")
-
   returnInpMatString = ""
   if (returnInpMatrix[0].length != undefined){
     for (i = 0; i < returnInpMatrix.length; i++){
       returnInpMatString += "[ "
-      // console.log(returnInpMatrix[i])
       for (j = 0; j < returnInpMatrix[0].length; j++){
         if (j == returnInpMatrix[0].length - 1){
           returnInpMatString += " || "
@@ -372,7 +352,6 @@ function formatMatrix(returnInpMatrix){
     }
   }
 
-  console.log(returnInpMatString)
   return returnInpMatString
 }
 
@@ -393,23 +372,17 @@ function gauss(rows, columns, A){
     var j = 0
     while (i < (rows) && j < (columns - 1) && (j!= null)) { //last column is augmented, we don't want to change it
         A, j = swap(i, j, A) //swap swaps rows and reassigns column
-        console.log("swapped", A)
-        //might need conditions to handle end j value
          if(j==null) {
             return solutions(i,j,A)
           }
 
           A = divide(i, j, A)
-          console.log("divided", A)
           A = eliminate(i, j, A)
-          console.log("eliminated", A)
 
           i = i + 1
           j = j + 1
-          console.log(i, j)
 
     }
-    console.log("getting out of functions")
     return solutions(i, j, A);
     //Should have RREF at this point according to algorithm
     function solutions(i, j, A){
@@ -453,7 +426,6 @@ function gauss(rows, columns, A){
         while (j < (columns - 1)){
             for (iter = i; iter < A.length; iter++){ //j is column input
                 if (A[iter][j] != 0){
-                  console.log('here,'+ j)
                     return j
                 }
 
