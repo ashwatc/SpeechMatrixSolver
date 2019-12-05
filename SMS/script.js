@@ -25,6 +25,8 @@ renderNotes(notes);
       Voice Recognition
 ------------------------------*/
 
+// as modified from the https://tutorialzine.com/2017/08/converting-from-speech-to-text-with-javascript tutorial
+
 // If false, the recording will stop after a few seconds of silence.
 // When true, the silence period is longer (about 15 seconds),
 // allowing us to keep recording even when the user pauses.
@@ -364,7 +366,6 @@ var A = [[0, 2, 3], [2, 1, 3]]
 
 //algorithm adapted from: https://www.csun.edu/~panferov/math262/262_rref.pdf
 
-
 function gauss(rows, columns, A){
     var sol = []
     var i = 0
@@ -416,8 +417,6 @@ function gauss(rows, columns, A){
 
               return ["Unique solutions", sol]
         }
-
-
 
 
     //functions
